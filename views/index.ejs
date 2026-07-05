@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head><title>Student List</title></head>
+<body>
+  <h1>Student List</h1>
+  <a href="/addStudent">Add New Student</a>
+  <table border="1" cellpadding="8">
+    <tr><th>Photo</th><th>Name</th><th>DOB</th><th>Contact</th></tr>
+    <% students.forEach(function(s) { %>
+      <tr>
+        <td><img src="<%= s.image %>" width="60"></td>
+        <td><a href="/student/<%= s.studentId %>"><%= s.name %></a></td>
+        <td><%= s.dob.toISOString().split('T')[0] %></td>
+        <td><%= s.contact %></td>
+      </tr>
+    <% }); %>
+  </table>
+</body>
+</html>

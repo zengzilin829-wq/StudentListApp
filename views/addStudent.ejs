@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Add Student</title></head>
+<body>
+  <h1>Add New Student</h1>
+  <form action="/addStudent" method="POST">
+    <label>Name: <input type="text" name="name" required></label><br><br>
+    <label>Date of Birth: <input type="date" name="dob" required></label><br><br>
+    <label>Contact: <input type="text" name="contact" maxlength="10" required></label><br><br>
+    <label>Image URL: <input type="text" name="image" required></label><br><br>
+    <button type="submit">Add Student</button>
+  </form>
+  <a href="/">Back to list</a>
+</body>
+</html>

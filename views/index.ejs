@@ -10,7 +10,7 @@
       <tr>
         <td><img src="<%= s.image %>" width="60"></td>
         <td><a href="/student/<%= s.studentId %>"><%= s.name %></a></td>
-        <td><%= s.dob.toISOString().split('T')[0] %></td>
+        <td><%= s.dob %></td>
         <td><%= s.contact %></td>
       </tr>
     <% }); %>

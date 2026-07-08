@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Edit Student</title></head>
+<body>
+  <h1>Edit Student</h1>
+  <form action="/editStudent/<%= student.studentId %>" method="POST">
+    <label>Name: <input type="text" name="name" value="<%= student.name %>" required></label><br><br>
+    <input type="date" name="dob" value="<%= student.dob %>" required>
+    <label>Contact: <input type="text" name="contact" maxlength="10" value="<%= student.contact %>" required></label><br><br>
+    <label>Image URL: <input type="text" name="image" value="<%= student.image %>" required></label><br><br>
+    <button type="submit">Save Changes</button>
+  </form>
+  <a href="/student/<%= student.studentId %>">Cancel</a>
+</body>
+</html>

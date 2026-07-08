@@ -8,7 +8,8 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: process.env.DB_PASSWORD,
-  database: 'c237_studentlistapp'
+  database: 'c237_studentlistapp',
+  dateStrings: true
 });
 
 db.connect((err) => {
@@ -77,6 +78,34 @@ app.post('/deleteStudent/:id', (req, res) => {
       return res.status(500).send('Database error');
     }
     res.redirect('/');
+  });
+});
+
+// Show edit student form
+app.get('/editStudent/:id', (req, res) => {
+  const sql = 'SELECT * FROM student WHERE studentId = ?';
+  db.query(sql, [req.params.id], (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Database error');
+    }
+    if (results.length === 0) {
+      return res.status(404).send('Student not found');
+    }
+    res.render('editStudent', { student: results[0] });
+  });
+});
+
+// Handle edit student form submission
+app.post('/editStudent/:id', (req, res) => {
+  const { name, dob, contact, image } = req.body;
+  const sql = 'UPDATE student SET name = ?, dob = ?, contact = ?, image = ? WHERE studentId = ?';
+  db.query(sql, [name, dob, contact, image, req.params.id], (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Database error');
+    }
+    res.redirect('/student/' + req.params.id);
   });
 });
 

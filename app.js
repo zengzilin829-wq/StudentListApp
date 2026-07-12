@@ -1,7 +1,23 @@
 require('dotenv').config();
 const express = require('express');
+const fs = require('fs');
 const mysql = require('mysql2');
+const multer = require('multer');
 const app = express();
+
+// Ensure upload directory exists
+fs.mkdirSync('public/images', { recursive: true });
+
+// Set up multer for file uploads
+const storage = multer.diskStorage({
+destination: (req, file, cb) => {
+cb(null, 'public/images'); // Directory to save uploaded files
+},
+filename: (req, file, cb) => {
+cb(null, file.originalname);
+}
+});
+const upload = multer({ storage: storage });
 
 // Create MySQL connection
 const db = mysql.createConnection({
@@ -57,8 +73,14 @@ app.get('/addStudent', (req, res) => {
 });
 
 // Handle add student form submission
-app.post('/addStudent', (req, res) => {
-  const { name, dob, contact, image } = req.body;
+app.post('/addStudent', upload.single('image'), (req, res) => {
+    const { name, dob, contact} = req.body;
+    let image;
+    if (req.file) {
+        image = req.file.filename; // Save only the filename
+    } else {
+        image = null;
+    }
   const sql = 'INSERT INTO student (name, dob, contact, image) VALUES (?, ?, ?, ?)';
   db.query(sql, [name, dob, contact, image], (err) => {
     if (err) {
@@ -97,8 +119,12 @@ app.get('/editStudent/:id', (req, res) => {
 });
 
 // Handle edit student form submission
-app.post('/editStudent/:id', (req, res) => {
-  const { name, dob, contact, image } = req.body;
+app.post('/editStudent/:id', upload.single('image'), (req, res) => {
+  const { name, dob, contact, currentImage } = req.body;
+  let image = currentImage || null;
+  if (req.file) {
+    image = req.file.filename; // Save only the filename
+  }
   const sql = 'UPDATE student SET name = ?, dob = ?, contact = ?, image = ? WHERE studentId = ?';
   db.query(sql, [name, dob, contact, image, req.params.id], (err) => {
     if (err) {
